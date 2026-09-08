@@ -2,327 +2,284 @@
 <html lang="nl">
 
 <head>
+  <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, viewport-fit=cover"
->
+  <title>GIBO Kaart - Studie</title>
 
-<title>GIBO Kaart - Studie</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
-<script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
 
-* {
-  box-sizing: border-box;
-}
+    header {
+      background: #7660a7;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  color: #222;
-}
+    header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
 
-header {
-  background: #7660a7;
-  color: white;
-  padding: 18px;
-  text-align: center;
-}
+    header p {
+      margin: 5px 0 0;
+    }
 
-header h1 {
-  margin: 0;
-  font-size: 25px;
-}
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 14px;
+    }
 
-header p {
-  margin: 5px 0 0;
-}
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 9px rgba(0,0,0,.08);
+    }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 14px;
-}
+    .counter {
+      text-align: center;
+    }
 
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 18px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 9px rgba(0,0,0,.08);
-}
+    #aantal {
+      font-size: 54px;
+      font-weight: bold;
+      color: #7660a7;
+    }
 
-.counter {
-  text-align: center;
-}
+    .resultaat {
+      display: none;
+      text-align: center;
+      padding: 22px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
 
-#aantal {
-  font-size: 54px;
-  font-weight: bold;
-  color: #7660a7;
-}
+    .aan {
+      background: #e1f5eb;
+      border: 3px solid #55b88d;
+    }
 
-.resultaat {
-  display: none;
-  text-align: center;
-  padding: 22px;
-  border-radius: 16px;
-  margin-bottom: 14px;
-}
+    .af {
+      background: #fde5ef;
+      border: 3px solid #e61d79;
+    }
 
-.aan {
-  background: #e1f5eb;
-  border: 3px solid #55b88d;
-}
+    .fout {
+      background: #fff5cb;
+      border: 3px solid #fad517;
+    }
 
-.af {
-  background: #fde5ef;
-  border: 3px solid #e61d79;
-}
+    #icoon {
+      font-size: 48px;
+    }
 
-.fout {
-  background: #fff5cb;
-  border: 3px solid #fad517;
-}
+    #naam {
+      font-size: 27px;
+      font-weight: bold;
+    }
 
-#icoon {
-  font-size: 48px;
-}
+    #klas {
+      margin-top: 4px;
+      font-size: 18px;
+    }
 
-#naam {
-  font-size: 27px;
-  font-weight: bold;
-}
+    #status {
+      margin-top: 12px;
+      font-size: 22px;
+      font-weight: bold;
+    }
 
-#klas {
-  margin-top: 4px;
-  font-size: 18px;
-}
+    #tijd {
+      margin-top: 6px;
+    }
 
-#status {
-  margin-top: 12px;
-  font-size: 22px;
-  font-weight: bold;
-}
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-#tijd {
-  margin-top: 6px;
-}
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+    }
 
-input {
-  width: 100%;
-  padding: 14px;
-  font-size: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  text-align: center;
-  margin-bottom: 10px;
-}
+    .groen {
+      background: #55b88d;
+      color: white;
+    }
 
-button {
-  width: 100%;
-  border: 0;
-  border-radius: 12px;
-  padding: 15px;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 8px;
-}
+    .paars {
+      background: #7660a7;
+      color: white;
+    }
 
-.groen {
-  background: #55b88d;
-  color: white;
-}
+    .roze {
+      background: #e61d79;
+      color: white;
+    }
 
-.paars {
-  background: #7660a7;
-  color: white;
-}
+    #scannerCard,
+    #overzichtCard {
+      display: none;
+    }
 
-.roze {
-  background: #e61d79;
-  color: white;
-}
+    #reader {
+      width: 100%;
+    }
 
-#scannerCard {
-  display: none;
-}
+    .klasblok {
+      border: 1px solid #ddd;
+      border-radius: 13px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
 
-#overzichtCard {
-  display: none;
-}
+    .klastitel {
+      background: #7660a7;
+      color: white;
+      padding: 12px 14px;
+      font-weight: bold;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+    }
 
-#reader {
-  width: 100%;
-}
+    .leerlingen {
+      padding: 5px 14px;
+    }
 
-.klasblok {
-  border: 1px solid #ddd;
-  border-radius: 13px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
+    .leerling {
+      padding: 9px 0;
+      border-bottom: 1px solid #eee;
+    }
 
-.klastitel {
-  background: #7660a7;
-  color: white;
-  padding: 12px 14px;
-  font-weight: bold;
-  font-size: 18px;
-  display: flex;
-  justify-content: space-between;
-}
+    .leerling:last-child {
+      border-bottom: none;
+    }
 
-.leerlingen {
-  padding: 5px 14px;
-}
+    .overzichtTotaal {
+      text-align: center;
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
 
-.leerling {
-  padding: 9px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.leerling:last-child {
-  border-bottom: none;
-}
-
-.overzichtTotaal {
-  text-align: center;
-  font-size: 21px;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-.klein {
-  text-align: center;
-  font-size: 13px;
-  color: #666;
-  line-height: 1.4;
-}
-
-</style>
-
+    .klein {
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.4;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-
-<h1>GIBO Kaart</h1>
-
-<p>Studie – aanwezigheden</p>
-
+  <h1>GIBO Kaart</h1>
+  <p>Studie – aanwezigheden</p>
 </header>
-
 
 <div class="container">
 
+  <div class="card counter">
+    <div id="aantal">–</div>
+    <div>leerlingen momenteel aangemeld</div>
+  </div>
 
-<div class="card counter">
+  <div id="resultaat" class="resultaat">
+    <div id="icoon"></div>
+    <div id="naam"></div>
+    <div id="klas"></div>
+    <div id="status"></div>
+    <div id="tijd"></div>
+  </div>
 
-  <div id="aantal">–</div>
+  <div id="pinCard" class="card">
+    <h3 style="text-align:center">
+      Studie openen
+    </h3>
 
-  <div>
-    leerlingen momenteel aangemeld
+    <input
+      id="pin"
+      type="password"
+      inputmode="numeric"
+      placeholder="Studie-PIN"
+    >
+
+    <button
+      class="groen"
+      onclick="startSysteem()"
+    >
+      Scanner starten
+    </button>
+  </div>
+
+  <div id="scannerCard" class="card">
+
+    <div id="reader"></div>
+
+    <p class="klein">
+      Richt de camera op de QR-code van de leerling.
+    </p>
+
+    <button
+      class="paars"
+      onclick="toonOverzicht()"
+    >
+      👥 Aanwezigheden bekijken
+    </button>
+
+  </div>
+
+  <div id="overzichtCard" class="card">
+
+    <h2 style="text-align:center">
+      Aanwezig vandaag
+    </h2>
+
+    <div id="overzichtInhoud"></div>
+
+    <button
+      class="roze"
+      onclick="sluitOverzicht()"
+    >
+      Terug naar scanner
+    </button>
+
   </div>
 
 </div>
-
-
-<div
-  id="resultaat"
-  class="resultaat"
->
-
-  <div id="icoon"></div>
-
-  <div id="naam"></div>
-
-  <div id="klas"></div>
-
-  <div id="status"></div>
-
-  <div id="tijd"></div>
-
-</div>
-
-
-<div
-  id="pinCard"
-  class="card"
->
-
-  <h3 style="text-align:center">
-    Studie openen
-  </h3>
-
-  <input
-    id="pin"
-    type="password"
-    inputmode="numeric"
-    placeholder="Studie-PIN"
-  >
-
-  <button
-    class="groen"
-    onclick="startSysteem()"
-  >
-    Scanner starten
-  </button>
-
-</div>
-
-
-<div
-  id="scannerCard"
-  class="card"
->
-
-  <div id="reader"></div>
-
-  <p class="klein">
-    Richt de camera op de QR-code van de leerling.
-  </p>
-
-  <button
-    class="paars"
-    onclick="toonOverzicht()"
-  >
-    👥 Aanwezigheden bekijken
-  </button>
-
-</div>
-
-
-<div
-  id="overzichtCard"
-  class="card"
->
-
-  <h2 style="text-align:center">
-    Aanwezig vandaag
-  </h2>
-
-  <div id="overzichtInhoud"></div>
-
-  <button
-    class="roze"
-    onclick="sluitOverzicht()"
-  >
-    Terug naar scanner
-  </button>
-
-</div>
-
-
-</div>
-
 
 <script>
 
@@ -331,16 +288,13 @@ button {
 // ======================================================
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbx1yy6dCMu8uiKgMxR6WTRTN3o1qxbxWctSSdZ_uPpime56D7LYLS3cWi4JnT0v4hChzA/exec";
+  "PLAK_HIER_JE_APPS_SCRIPT_URL";
 
 let studiePin = "";
-
 let scanner = null;
-
 let bezig = false;
 
 let laatsteCode = "";
-
 let laatsteTijd = 0;
 
 
@@ -356,10 +310,8 @@ function apiCall(params, callback) {
     "_" +
     Math.floor(Math.random() * 10000);
 
-
   const script =
     document.createElement("script");
-
 
   window[callbackNaam] = function(data) {
 
@@ -371,18 +323,14 @@ function apiCall(params, callback) {
 
   };
 
-
   params.callback =
     callbackNaam;
-
 
   const query =
     new URLSearchParams(params).toString();
 
-
   script.src =
     API_URL + "?" + query;
-
 
   script.onerror = function() {
 
@@ -394,10 +342,31 @@ function apiCall(params, callback) {
 
   };
 
-
   document.body.appendChild(script);
-
 }
+
+
+// ======================================================
+// SNELLER OPENEN: PIN ONTHOUDEN
+// ======================================================
+
+window.addEventListener("load", function() {
+
+  const opgeslagenPin =
+    localStorage.getItem("studiePin");
+
+  if (opgeslagenPin) {
+
+    document
+      .getElementById("pin")
+      .value =
+      opgeslagenPin;
+
+    startSysteem();
+
+  }
+
+});
 
 
 // ======================================================
@@ -412,7 +381,6 @@ function startSysteem() {
       .value
       .trim();
 
-
   if (!studiePin) {
 
     toonFout(
@@ -423,6 +391,10 @@ function startSysteem() {
 
   }
 
+  localStorage.setItem(
+    "studiePin",
+    studiePin
+  );
 
   apiCall(
     {
@@ -436,34 +408,33 @@ function startSysteem() {
 
         toonFout(resultaat.melding);
 
+        localStorage.removeItem(
+          "studiePin"
+        );
+
         return;
 
       }
-
 
       document
         .getElementById("aantal")
         .innerText =
         resultaat.aantal;
 
-
       document
         .getElementById("pinCard")
         .style.display =
         "none";
-
 
       document
         .getElementById("scannerCard")
         .style.display =
         "block";
 
-
       startCamera();
 
     }
   );
-
 }
 
 
@@ -473,12 +444,12 @@ function startSysteem() {
 
 function startCamera() {
 
-  if (scanner) return;
-
+  if (scanner) {
+    return;
+  }
 
   scanner =
     new Html5Qrcode("reader");
-
 
   scanner.start(
 
@@ -487,7 +458,7 @@ function startCamera() {
     },
 
     {
-      fps: 10,
+      fps: 20,
 
       qrbox: function(
         width,
@@ -498,15 +469,16 @@ function startCamera() {
           Math.min(
             width,
             height
-          ) * 0.70;
-
+          ) * 0.85;
 
         return {
           width: grootte,
           height: grootte
         };
 
-      }
+      },
+
+      aspectRatio: 1.0
     },
 
     qrGevonden
@@ -522,7 +494,6 @@ function startCamera() {
     );
 
   });
-
 }
 
 
@@ -535,27 +506,22 @@ function qrGevonden(code) {
   const nu =
     Date.now();
 
+  if (bezig) {
+    return;
+  }
 
-  if (bezig) return;
-
-
-  // Dezelfde QR niet onmiddellijk opnieuw verwerken
   if (
     code === laatsteCode &&
     nu - laatsteTijd < 5000
   ) {
-
     return;
-
   }
-
 
   bezig = true;
 
   laatsteCode = code;
 
   laatsteTijd = nu;
-
 
   apiCall(
     {
@@ -568,7 +534,6 @@ function qrGevonden(code) {
 
       bezig = false;
 
-
       if (!resultaat.succes) {
 
         toonFout(
@@ -579,12 +544,10 @@ function qrGevonden(code) {
 
       }
 
-
       document
         .getElementById("aantal")
         .innerText =
         resultaat.aantal;
-
 
       toonLeerling(
         resultaat
@@ -592,7 +555,6 @@ function qrGevonden(code) {
 
     }
   );
-
 }
 
 
@@ -607,10 +569,8 @@ function toonLeerling(r) {
       "resultaat"
     );
 
-
   box.style.display =
     "block";
-
 
   document
     .getElementById("naam")
@@ -619,18 +579,15 @@ function toonLeerling(r) {
     " " +
     r.achternaam;
 
-
   document
     .getElementById("klas")
     .innerText =
     "Klas " + r.klas;
 
-
   document
     .getElementById("tijd")
     .innerText =
     r.tijd;
-
 
   if (
     r.status === "AANGEMELD"
@@ -639,17 +596,17 @@ function toonLeerling(r) {
     box.className =
       "resultaat aan";
 
-
     document
       .getElementById("icoon")
       .innerText =
       "✓";
 
-
     document
       .getElementById("status")
       .innerText =
       "AANGEMELD";
+
+    tril(80);
 
   }
 
@@ -658,32 +615,44 @@ function toonLeerling(r) {
     box.className =
       "resultaat af";
 
-
     document
       .getElementById("icoon")
       .innerText =
       "↩";
-
 
     document
       .getElementById("status")
       .innerText =
       "AFGEMELD";
 
+    tril([100, 80, 100]);
+
   }
-
-
-  // Overzicht alvast vernieuwen
-  laadOverzicht(false);
-
 
   setTimeout(function() {
 
     box.style.display =
       "none";
 
-  }, 3500);
+  }, 2500);
+}
 
+
+// ======================================================
+// TRILLING
+// ======================================================
+
+function tril(patroon) {
+
+  if (
+    navigator.vibrate
+  ) {
+
+    navigator.vibrate(
+      patroon
+    );
+
+  }
 }
 
 
@@ -698,56 +667,50 @@ function toonFout(melding) {
       "resultaat"
     );
 
-
   box.style.display =
     "block";
 
   box.className =
     "resultaat fout";
 
-
   document
     .getElementById("icoon")
     .innerText =
     "⚠";
-
 
   document
     .getElementById("naam")
     .innerText =
     "Niet verwerkt";
 
-
   document
     .getElementById("klas")
     .innerText =
     "";
-
 
   document
     .getElementById("status")
     .innerText =
     melding;
 
-
   document
     .getElementById("tijd")
     .innerText =
     "";
 
+  tril([150, 100, 150]);
 
   setTimeout(function() {
 
     box.style.display =
       "none";
 
-  }, 5000);
-
+  }, 4000);
 }
 
 
 // ======================================================
-// OVERZICHT OPENEN
+// OVERZICHT
 // ======================================================
 
 function toonOverzicht() {
@@ -757,26 +720,17 @@ function toonOverzicht() {
     .style.display =
     "none";
 
-
   document
     .getElementById("overzichtCard")
     .style.display =
     "block";
 
-
-  laadOverzicht(true);
+  laadOverzicht();
 
 }
 
 
-// ======================================================
-// OVERZICHT LADEN
-// ======================================================
-
-function laadOverzicht(tonen) {
-
-  if (!studiePin) return;
-
+function laadOverzicht() {
 
   apiCall(
     {
@@ -788,40 +742,29 @@ function laadOverzicht(tonen) {
 
       if (!resultaat.succes) {
 
-        if (tonen) {
-          toonFout(
-            resultaat.melding
-          );
-        }
+        toonFout(
+          resultaat.melding
+        );
 
         return;
-
       }
-
 
       document
         .getElementById("aantal")
         .innerText =
         resultaat.totaal;
 
-
       const inhoud =
         document.getElementById(
           "overzichtInhoud"
         );
 
-
       let html = `
-
         <div class="overzichtTotaal">
-
           ${resultaat.totaal}
           leerlingen aanwezig
-
         </div>
-
       `;
-
 
       const klassen =
         Object.keys(
@@ -831,30 +774,20 @@ function laadOverzicht(tonen) {
             a.localeCompare(
               b,
               undefined,
-              {
-                numeric: true
-              }
+              { numeric: true }
             )
         );
-
 
       if (
         klassen.length === 0
       ) {
 
         html += `
-
           <p style="text-align:center">
-
-            Momenteel zijn er geen
-            leerlingen aangemeld.
-
+            Momenteel zijn er geen leerlingen aangemeld.
           </p>
-
         `;
-
       }
-
 
       klassen.forEach(
         function(klas) {
@@ -862,9 +795,7 @@ function laadOverzicht(tonen) {
           const leerlingen =
             resultaat.klassen[klas];
 
-
           html += `
-
             <div class="klasblok">
 
               <div class="klastitel">
@@ -880,51 +811,38 @@ function laadOverzicht(tonen) {
               </div>
 
               <div class="leerlingen">
-
           `;
-
 
           leerlingen.forEach(
             function(leerling) {
 
               html += `
-
                 <div class="leerling">
-
                   ${escapeHtml(
                     leerling.voornaam
                   )}
-
                   ${escapeHtml(
                     leerling.achternaam
                   )}
-
                 </div>
-
               `;
 
             }
           );
 
-
           html += `
-
               </div>
-
             </div>
-
           `;
 
         }
       );
-
 
       inhoud.innerHTML =
         html;
 
     }
   );
-
 }
 
 
@@ -939,17 +857,15 @@ function sluitOverzicht() {
     .style.display =
     "none";
 
-
   document
     .getElementById("scannerCard")
     .style.display =
     "block";
-
 }
 
 
 // ======================================================
-// VEILIG TEKST TONEN
+// VEILIGE TEKST
 // ======================================================
 
 function escapeHtml(tekst) {
@@ -960,11 +876,9 @@ function escapeHtml(tekst) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-
 }
 
 </script>
 
 </body>
-
 </html>
