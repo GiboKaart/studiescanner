@@ -2,213 +2,297 @@
 <html lang="nl">
 
 <head>
-  <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
+<meta charset="UTF-8">
 
-  <title>GIBO Kaart - Studie</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+<title>GIBO Kaart - Studie</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<script src="https://unpkg.com/html5-qrcode"></script>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #222;
-    }
+<style>
 
-    header {
-      background: #7660a7;
-      color: white;
-      padding: 18px;
-      text-align: center;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 25px;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
 
-    header p {
-      margin: 5px 0 0;
-    }
+header {
+  background: #7660a7;
+  color: white;
+  text-align: center;
+  padding: 16px;
+}
 
-    .container {
-      max-width: 600px;
-      margin: auto;
-      padding: 14px;
-    }
+header h1 {
+  margin: 0;
+  font-size: 25px;
+}
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 14px;
-      box-shadow: 0 2px 9px rgba(0,0,0,.08);
-    }
+header p {
+  margin: 4px 0 0;
+}
 
-    .counter {
-      text-align: center;
-    }
+.container {
+  max-width: 620px;
+  margin: auto;
+  padding: 12px;
+}
 
-    #aantal {
-      font-size: 54px;
-      font-weight: bold;
-      color: #7660a7;
-    }
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 9px rgba(0,0,0,.08);
+}
 
-    .resultaat {
-      display: none;
-      text-align: center;
-      padding: 22px;
-      border-radius: 16px;
-      margin-bottom: 14px;
-    }
+.counter {
+  text-align: center;
+}
 
-    .aan {
-      background: #e1f5eb;
-      border: 3px solid #55b88d;
-    }
+#aantal {
+  font-size: 48px;
+  font-weight: bold;
+  color: #7660a7;
+}
 
-    .af {
-      background: #fde5ef;
-      border: 3px solid #e61d79;
-    }
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
 
-    .fout {
-      background: #fff5cb;
-      border: 3px solid #fad517;
-    }
+.groen {
+  background: #55b88d;
+  color: white;
+}
 
-    #icoon {
-      font-size: 48px;
-    }
+.paars {
+  background: #7660a7;
+  color: white;
+}
 
-    #naam {
-      font-size: 27px;
-      font-weight: bold;
-    }
+.roze {
+  background: #e61d79;
+  color: white;
+}
 
-    #klas {
-      margin-top: 4px;
-      font-size: 18px;
-    }
+.geel {
+  background: #fad517;
+  color: #222;
+}
 
-    #status {
-      margin-top: 12px;
-      font-size: 22px;
-      font-weight: bold;
-    }
+.grijs {
+  background: #e9e9e9;
+  color: #333;
+}
 
-    #tijd {
-      margin-top: 6px;
-    }
+input {
+  width: 100%;
+  padding: 14px;
+  font-size: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
 
-    input {
-      width: 100%;
-      padding: 14px;
-      font-size: 20px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      text-align: center;
-      margin-bottom: 10px;
-    }
+#scannerCard,
+#overzichtCard {
+  display: none;
+}
 
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 12px;
-      padding: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 8px;
-    }
+#reader {
+  width: 100%;
+}
 
-    .groen {
-      background: #55b88d;
-      color: white;
-    }
+.modes {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
 
-    .paars {
-      background: #7660a7;
-      color: white;
-    }
+.modes button {
+  margin: 0;
+}
 
-    .roze {
-      background: #e61d79;
-      color: white;
-    }
+.modeActive {
+  background: #7660a7;
+  color: white;
+}
 
-    #scannerCard,
-    #overzichtCard {
-      display: none;
-    }
+.modeInactive {
+  background: #eee;
+  color: #444;
+}
 
-    #reader {
-      width: 100%;
-    }
+#modusInfo {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #666;
+}
 
-    .klasblok {
-      border: 1px solid #ddd;
-      border-radius: 13px;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
+.wachtrijTitel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    .klastitel {
-      background: #7660a7;
-      color: white;
-      padding: 12px 14px;
-      font-weight: bold;
-      font-size: 18px;
-      display: flex;
-      justify-content: space-between;
-    }
+#wachtrijAantal {
+  background: #e61d79;
+  color: white;
+  min-width: 34px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  text-align: center;
+  font-weight: bold;
+}
 
-    .leerlingen {
-      padding: 5px 14px;
-    }
+#wachtrij {
+  max-height: 260px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
 
-    .leerling {
-      padding: 9px 0;
-      border-bottom: 1px solid #eee;
-    }
+.scanItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 9px 3px;
+}
 
-    .leerling:last-child {
-      border-bottom: none;
-    }
+.scanNaam {
+  font-weight: bold;
+}
 
-    .overzichtTotaal {
-      text-align: center;
-      font-size: 21px;
-      font-weight: bold;
-      margin-bottom: 16px;
-    }
+.scanKlas {
+  font-size: 13px;
+  color: #777;
+}
 
-    .klein {
-      text-align: center;
-      font-size: 13px;
-      color: #666;
-      line-height: 1.4;
-    }
-  </style>
+.verwijder {
+  width: auto;
+  padding: 6px 10px;
+  margin: 0;
+  background: #fde5ef;
+  color: #e61d79;
+}
+
+#resultaat {
+  display: none;
+  text-align: center;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+}
+
+.aan {
+  background: #e1f5eb;
+  border: 3px solid #55b88d;
+}
+
+.af {
+  background: #fde5ef;
+  border: 3px solid #e61d79;
+}
+
+.fout {
+  background: #fff5cb;
+  border: 3px solid #fad517;
+}
+
+.info {
+  background: #eee9f6;
+  border: 3px solid #7660a7;
+}
+
+#icoon {
+  font-size: 42px;
+}
+
+#naam {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+#status {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+#klas,
+#tijd {
+  margin-top: 4px;
+}
+
+.klasblok {
+  border: 1px solid #ddd;
+  border-radius: 13px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.klastitel {
+  background: #7660a7;
+  color: white;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.leerling {
+  padding: 9px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.leerling:last-child {
+  border: none;
+}
+
+.overzichtTotaal {
+  text-align: center;
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.klein {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <header>
   <h1>GIBO Kaart</h1>
-  <p>Studie – aanwezigheden</p>
+  <p>Studie – scansysteem</p>
 </header>
+
 
 <div class="container">
 
@@ -217,7 +301,8 @@
     <div>leerlingen momenteel aangemeld</div>
   </div>
 
-  <div id="resultaat" class="resultaat">
+
+  <div id="resultaat">
     <div id="icoon"></div>
     <div id="naam"></div>
     <div id="klas"></div>
@@ -225,7 +310,9 @@
     <div id="tijd"></div>
   </div>
 
+
   <div id="pinCard" class="card">
+
     <h3 style="text-align:center">
       Studie openen
     </h3>
@@ -243,26 +330,101 @@
     >
       Scanner starten
     </button>
+
   </div>
 
-  <div id="scannerCard" class="card">
 
-    <div id="reader"></div>
+  <div id="scannerCard">
 
-    <p class="klein">
-      Richt de camera op de QR-code van de leerling.
-    </p>
+    <div class="card">
 
-    <button
-      class="paars"
-      onclick="toonOverzicht()"
+      <div class="modes">
+
+        <button
+          id="btnSnel"
+          class="modeActive"
+          onclick="kiesModus('snel')"
+        >
+          ⚡ Snelscan
+        </button>
+
+        <button
+          id="btnDirect"
+          class="modeInactive"
+          onclick="kiesModus('direct')"
+        >
+          ↔ Direct
+        </button>
+
+      </div>
+
+      <div id="modusInfo">
+        Scan meerdere leerlingen achter elkaar.
+      </div>
+
+      <div id="reader"></div>
+
+    </div>
+
+
+    <div
+      id="wachtrijCard"
+      class="card"
     >
-      👥 Aanwezigheden bekijken
-    </button>
+
+      <div class="wachtrijTitel">
+
+        <strong>
+          Klaar om te verwerken
+        </strong>
+
+        <span id="wachtrijAantal">
+          0
+        </span>
+
+      </div>
+
+      <div id="wachtrij"></div>
+
+
+      <button
+        id="verwerkKnop"
+        class="groen"
+        onclick="verwerkWachtrij()"
+        disabled
+      >
+        Verwerk scans
+      </button>
+
+
+      <button
+        class="grijs"
+        onclick="leegWachtrij()"
+      >
+        Wachtrij leegmaken
+      </button>
+
+    </div>
+
+
+    <div class="card">
+
+      <button
+        class="paars"
+        onclick="toonOverzicht()"
+      >
+        👥 Aanwezigheden bekijken
+      </button>
+
+    </div>
 
   </div>
 
-  <div id="overzichtCard" class="card">
+
+  <div
+    id="overzichtCard"
+    class="card"
+  >
 
     <h2 style="text-align:center">
       Aanwezig vandaag
@@ -281,21 +443,35 @@
 
 </div>
 
+
 <script>
 
 // ======================================================
-// PLAK HIER JE APPS SCRIPT /exec URL
+// PLAK HIER JE HUIDIGE WERKENDE /exec URL
 // ======================================================
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbx1yy6dCMu8uiKgMxR6WTRTN3o1qxbxWctSSdZ_uPpime56D7LYLS3cWi4JnT0v4hChzA/exec";
 
+
+// ======================================================
+// VARIABELEN
+// ======================================================
+
 let studiePin = "";
+
 let scanner = null;
+
+let modus = "snel";
+
 let bezig = false;
 
-let laatsteCode = "";
-let laatsteTijd = 0;
+let laatsteDirecteCode = "";
+let laatsteDirecteTijd = 0;
+
+let wachtrij = [];
+
+let leerlingIndex = {};
 
 
 // ======================================================
@@ -308,65 +484,94 @@ function apiCall(params, callback) {
     "cb_" +
     Date.now() +
     "_" +
-    Math.floor(Math.random() * 10000);
+    Math.floor(Math.random() * 100000);
 
   const script =
     document.createElement("script");
 
-  window[callbackNaam] = function(data) {
+  let klaar = false;
 
-    callback(data);
 
-    delete window[callbackNaam];
+  function opruimen() {
 
-    script.remove();
+    if (klaar) return;
 
-  };
+    klaar = true;
+
+    try {
+      delete window[callbackNaam];
+    }
+    catch (e) {}
+
+    try {
+      script.remove();
+    }
+    catch (e) {}
+  }
+
+
+  window[callbackNaam] =
+    function(data) {
+
+      opruimen();
+
+      callback(data);
+    };
+
 
   params.callback =
     callbackNaam;
 
+
   const query =
     new URLSearchParams(params).toString();
+
 
   script.src =
     API_URL + "?" + query;
 
-  script.onerror = function() {
 
-    bezig = false;
+  script.onerror =
+    function() {
 
-    toonFout(
-      "Kan geen verbinding maken met het studiesysteem."
-    );
+      opruimen();
 
-  };
+      bezig = false;
+
+      toonFout(
+        "Geen verbinding met het studiesysteem."
+      );
+    };
+
 
   document.body.appendChild(script);
 }
 
 
 // ======================================================
-// SNELLER OPENEN: PIN ONTHOUDEN
+// AUTOMATISCH OPENEN
 // ======================================================
 
-window.addEventListener("load", function() {
+window.addEventListener(
+  "load",
+  function() {
 
-  const opgeslagenPin =
-    localStorage.getItem("studiePin");
+    const opgeslagenPin =
+      localStorage.getItem(
+        "studiePin"
+      );
 
-  if (opgeslagenPin) {
+    if (opgeslagenPin) {
 
-    document
-      .getElementById("pin")
-      .value =
-      opgeslagenPin;
+      document
+        .getElementById("pin")
+        .value =
+        opgeslagenPin;
 
-    startSysteem();
-
+      startSysteem();
+    }
   }
-
-});
+);
 
 
 // ======================================================
@@ -388,13 +593,8 @@ function startSysteem() {
     );
 
     return;
-
   }
 
-  localStorage.setItem(
-    "studiePin",
-    studiePin
-  );
 
   apiCall(
     {
@@ -402,37 +602,78 @@ function startSysteem() {
       pin: studiePin
     },
 
-    function(resultaat) {
+    function(r) {
 
-      if (!resultaat.succes) {
-
-        toonFout(resultaat.melding);
+      if (!r.succes) {
 
         localStorage.removeItem(
           "studiePin"
         );
 
-        return;
+        toonFout(r.melding);
 
+        return;
       }
+
+
+      localStorage.setItem(
+        "studiePin",
+        studiePin
+      );
+
 
       document
         .getElementById("aantal")
         .innerText =
-        resultaat.aantal;
+        r.aantal;
+
 
       document
         .getElementById("pinCard")
         .style.display =
         "none";
 
+
       document
         .getElementById("scannerCard")
         .style.display =
         "block";
 
+
       startCamera();
 
+
+      // Leerlingenlijst wordt op de achtergrond geladen.
+      // Camera hoeft hier niet op te wachten.
+      laadLeerlingIndex();
+
+    }
+  );
+}
+
+
+// ======================================================
+// LEERLINGENLIJST ACHTERGROND
+// ======================================================
+
+function laadLeerlingIndex() {
+
+  apiCall(
+    {
+      actie: "leerlingenlijst",
+      pin: studiePin
+    },
+
+    function(r) {
+
+      if (
+        r.succes &&
+        r.leerlingen
+      ) {
+
+        leerlingIndex =
+          r.leerlingen;
+      }
     }
   );
 }
@@ -444,41 +685,37 @@ function startSysteem() {
 
 function startCamera() {
 
-  if (scanner) {
-    return;
-  }
+  if (scanner) return;
+
 
   scanner =
     new Html5Qrcode("reader");
 
+
   scanner.start(
 
     {
-      facingMode: "environment"
+      facingMode:
+        "environment"
     },
 
     {
       fps: 20,
 
-      qrbox: function(
-        width,
-        height
-      ) {
+      qrbox:
+        function(width, height) {
 
-        const grootte =
-          Math.min(
-            width,
-            height
-          ) * 0.85;
+          const grootte =
+            Math.min(
+              width,
+              height
+            ) * 0.85;
 
-        return {
-          width: grootte,
-          height: grootte
-        };
-
-      },
-
-      aspectRatio: 1.0
+          return {
+            width: grootte,
+            height: grootte
+          };
+        }
     },
 
     qrGevonden
@@ -490,9 +727,8 @@ function startCamera() {
     scanner = null;
 
     toonFout(
-      "De camera kon niet worden gestart. Controleer de cameratoestemming."
+      "Camera kon niet worden gestart."
     );
-
   });
 }
 
@@ -503,25 +739,504 @@ function startCamera() {
 
 function qrGevonden(code) {
 
-  const nu =
-    Date.now();
+  code =
+    String(code || '').trim();
 
-  if (bezig) {
+  if (!code) return;
+
+
+  if (modus === "snel") {
+
+    voegAanWachtrijToe(code);
+
+  }
+
+  else {
+
+    directeScan(code);
+
+  }
+}
+
+
+// ======================================================
+// SNELSCAN
+// ======================================================
+
+function voegAanWachtrijToe(code) {
+
+  // Reeds in wachtrij?
+  if (
+    wachtrij.some(
+      item => item.code === code
+    )
+  ) {
+
     return;
   }
 
+
+  const leerling =
+    leerlingIndex[code];
+
+
+  wachtrij.push({
+    code: code,
+
+    voornaam:
+      leerling
+        ? leerling.voornaam
+        : "",
+
+    achternaam:
+      leerling
+        ? leerling.achternaam
+        : "",
+
+    klas:
+      leerling
+        ? leerling.klas
+        : ""
+  });
+
+
+  tril(60);
+
+  tekenWachtrij();
+}
+
+
+// ======================================================
+// WACHTRIJ TONEN
+// ======================================================
+
+function tekenWachtrij() {
+
+  const lijst =
+    document.getElementById(
+      "wachtrij"
+    );
+
+
+  document
+    .getElementById(
+      "wachtrijAantal"
+    )
+    .innerText =
+    wachtrij.length;
+
+
+  const knop =
+    document.getElementById(
+      "verwerkKnop"
+    );
+
+
+  knop.disabled =
+    wachtrij.length === 0;
+
+
+  knop.innerText =
+    wachtrij.length === 0
+
+      ? "Verwerk scans"
+
+      : "Verwerk " +
+        wachtrij.length +
+        " scans";
+
+
+  if (wachtrij.length === 0) {
+
+    lijst.innerHTML =
+      '<p class="klein">Nog geen QR-codes gescand.</p>';
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  wachtrij.forEach(
+    function(item, index) {
+
+      let naam;
+
+
+      if (item.voornaam) {
+
+        naam =
+          escapeHtml(
+            item.voornaam +
+            " " +
+            item.achternaam
+          );
+
+      }
+
+      else {
+
+        naam =
+          "QR-code " +
+          (index + 1);
+
+      }
+
+
+      html += `
+
+        <div class="scanItem">
+
+          <div>
+
+            <div class="scanNaam">
+              ${naam}
+            </div>
+
+            <div class="scanKlas">
+
+              ${
+                item.klas
+                  ? "Klas " +
+                    escapeHtml(item.klas)
+                  : "Klaar om te verwerken"
+              }
+
+            </div>
+
+          </div>
+
+          <button
+            class="verwijder"
+            onclick="verwijderUitWachtrij(${index})"
+          >
+            ✕
+          </button>
+
+        </div>
+
+      `;
+    }
+  );
+
+
+  lijst.innerHTML = html;
+}
+
+
+// ======================================================
+// VERWIJDEREN
+// ======================================================
+
+function verwijderUitWachtrij(index) {
+
+  wachtrij.splice(
+    index,
+    1
+  );
+
+  tekenWachtrij();
+}
+
+
+function leegWachtrij() {
+
+  wachtrij = [];
+
+  tekenWachtrij();
+}
+
+
+// ======================================================
+// WACHTRIJ VERWERKEN
+// ======================================================
+
+async function verwerkWachtrij() {
+
   if (
-    code === laatsteCode &&
-    nu - laatsteTijd < 5000
+    bezig ||
+    wachtrij.length === 0
   ) {
     return;
   }
 
+
   bezig = true;
 
-  laatsteCode = code;
 
-  laatsteTijd = nu;
+  const knop =
+    document.getElementById(
+      "verwerkKnop"
+    );
+
+
+  knop.disabled = true;
+  knop.innerText = "Bezig met verwerken…";
+
+
+  const codes =
+    wachtrij.map(
+      item => item.code
+    );
+
+
+  // We sturen maximaal 20 codes per verzoek.
+  // Zo blijft de URL kort genoeg.
+  const blokken = [];
+
+  for (
+    let i = 0;
+    i < codes.length;
+    i += 20
+  ) {
+
+    blokken.push(
+      codes.slice(i, i + 20)
+    );
+  }
+
+
+  let totaalVerwerkt = 0;
+  let totaalReeds = 0;
+  let totaalFouten = 0;
+
+  let huidigAantal = null;
+
+
+  try {
+
+    for (
+      const blok
+      of blokken
+    ) {
+
+      const resultaat =
+        await apiCallPromise({
+
+          actie: "batch",
+
+          pin:
+            studiePin,
+
+          codes:
+            JSON.stringify(blok)
+        });
+
+
+      if (!resultaat.succes) {
+
+        throw new Error(
+          resultaat.melding ||
+          "Verwerking mislukt."
+        );
+      }
+
+
+      totaalVerwerkt +=
+        resultaat.verwerkt
+          ? resultaat.verwerkt.length
+          : 0;
+
+
+      totaalReeds +=
+        resultaat.reeds
+          ? resultaat.reeds.length
+          : 0;
+
+
+      totaalFouten +=
+        resultaat.fouten
+          ? resultaat.fouten.length
+          : 0;
+
+
+      huidigAantal =
+        resultaat.aantal;
+    }
+
+
+    if (
+      huidigAantal !== null
+    ) {
+
+      document
+        .getElementById("aantal")
+        .innerText =
+        huidigAantal;
+    }
+
+
+    wachtrij = [];
+
+    tekenWachtrij();
+
+
+    tril([80, 50, 80]);
+
+
+    toonBatchResultaat(
+      totaalVerwerkt,
+      totaalReeds,
+      totaalFouten
+    );
+
+  }
+
+  catch (fout) {
+
+    toonFout(
+      fout.message ||
+      "Er ging iets mis."
+    );
+
+  }
+
+  finally {
+
+    bezig = false;
+
+    tekenWachtrij();
+  }
+}
+
+
+// ======================================================
+// API ALS PROMISE
+// ======================================================
+
+function apiCallPromise(params) {
+
+  return new Promise(
+    function(resolve) {
+
+      apiCall(
+        params,
+        resolve
+      );
+    }
+  );
+}
+
+
+// ======================================================
+// RESULTAAT BATCH
+// ======================================================
+
+function toonBatchResultaat(
+  verwerkt,
+  reeds,
+  fouten
+) {
+
+  const box =
+    document.getElementById(
+      "resultaat"
+    );
+
+
+  box.style.display =
+    "block";
+
+  box.className =
+    "info";
+
+
+  document
+    .getElementById("icoon")
+    .innerText =
+    "✓";
+
+
+  document
+    .getElementById("naam")
+    .innerText =
+    verwerkt +
+    " leerlingen verwerkt";
+
+
+  document
+    .getElementById("klas")
+    .innerText =
+    "";
+
+
+  let tekst =
+    verwerkt +
+    " aangemeld";
+
+
+  if (reeds > 0) {
+
+    tekst +=
+      " • " +
+      reeds +
+      " reeds aangemeld";
+  }
+
+
+  if (fouten > 0) {
+
+    tekst +=
+      " • " +
+      fouten +
+      " niet herkend";
+  }
+
+
+  document
+    .getElementById("status")
+    .innerText =
+    tekst;
+
+
+  document
+    .getElementById("tijd")
+    .innerText =
+    "";
+
+
+  setTimeout(
+    function() {
+
+      box.style.display =
+        "none";
+
+    },
+    4500
+  );
+}
+
+
+// ======================================================
+// DIRECTE SCAN
+// ======================================================
+
+function directeScan(code) {
+
+  const nu = Date.now();
+
+
+  if (bezig) return;
+
+
+  if (
+    code === laatsteDirecteCode &&
+    nu - laatsteDirecteTijd < 5000
+  ) {
+
+    return;
+  }
+
+
+  laatsteDirecteCode =
+    code;
+
+  laatsteDirecteTijd =
+    nu;
+
+  bezig = true;
+
 
   apiCall(
     {
@@ -530,28 +1245,28 @@ function qrGevonden(code) {
       code: code
     },
 
-    function(resultaat) {
+    function(r) {
 
       bezig = false;
 
-      if (!resultaat.succes) {
+
+      if (!r.succes) {
 
         toonFout(
-          resultaat.melding
+          r.melding
         );
 
         return;
-
       }
+
 
       document
         .getElementById("aantal")
         .innerText =
-        resultaat.aantal;
+        r.aantal;
 
-      toonLeerling(
-        resultaat
-      );
+
+      toonDirectResultaat(r);
 
     }
   );
@@ -559,18 +1274,20 @@ function qrGevonden(code) {
 
 
 // ======================================================
-// SCANRESULTAAT
+// DIRECT RESULTAAT
 // ======================================================
 
-function toonLeerling(r) {
+function toonDirectResultaat(r) {
 
   const box =
     document.getElementById(
       "resultaat"
     );
 
+
   box.style.display =
     "block";
+
 
   document
     .getElementById("naam")
@@ -579,32 +1296,39 @@ function toonLeerling(r) {
     " " +
     r.achternaam;
 
+
   document
     .getElementById("klas")
     .innerText =
-    "Klas " + r.klas;
+    "Klas " +
+    r.klas;
+
 
   document
     .getElementById("tijd")
     .innerText =
     r.tijd;
 
+
   if (
     r.status === "AANGEMELD"
   ) {
 
     box.className =
-      "resultaat aan";
+      "aan";
+
 
     document
       .getElementById("icoon")
       .innerText =
       "✓";
 
+
     document
       .getElementById("status")
       .innerText =
       "AANGEMELD";
+
 
     tril(80);
 
@@ -613,99 +1337,103 @@ function toonLeerling(r) {
   else {
 
     box.className =
-      "resultaat af";
+      "af";
+
 
     document
       .getElementById("icoon")
       .innerText =
       "↩";
 
+
     document
       .getElementById("status")
       .innerText =
       "AFGEMELD";
 
-    tril([100, 80, 100]);
+
+    tril([100, 70, 100]);
 
   }
 
-  setTimeout(function() {
 
-    box.style.display =
-      "none";
+  setTimeout(
+    function() {
 
-  }, 2500);
+      box.style.display =
+        "none";
+
+    },
+    2500
+  );
 }
 
 
 // ======================================================
-// TRILLING
+// MODUS KIEZEN
 // ======================================================
 
-function tril(patroon) {
+function kiesModus(nieuweModus) {
 
-  if (
-    navigator.vibrate
-  ) {
-
-    navigator.vibrate(
-      patroon
-    );
-
-  }
-}
+  modus =
+    nieuweModus;
 
 
-// ======================================================
-// FOUT
-// ======================================================
-
-function toonFout(melding) {
-
-  const box =
+  const snel =
     document.getElementById(
-      "resultaat"
+      "btnSnel"
     );
 
-  box.style.display =
-    "block";
 
-  box.className =
-    "resultaat fout";
+  const direct =
+    document.getElementById(
+      "btnDirect"
+    );
 
-  document
-    .getElementById("icoon")
-    .innerText =
-    "⚠";
 
-  document
-    .getElementById("naam")
-    .innerText =
-    "Niet verwerkt";
+  const wachtrijCard =
+    document.getElementById(
+      "wachtrijCard"
+    );
 
-  document
-    .getElementById("klas")
-    .innerText =
-    "";
 
-  document
-    .getElementById("status")
-    .innerText =
-    melding;
+  const info =
+    document.getElementById(
+      "modusInfo"
+    );
 
-  document
-    .getElementById("tijd")
-    .innerText =
-    "";
 
-  tril([150, 100, 150]);
+  if (modus === "snel") {
 
-  setTimeout(function() {
+    snel.className =
+      "modeActive";
 
-    box.style.display =
+    direct.className =
+      "modeInactive";
+
+    wachtrijCard.style.display =
+      "block";
+
+    info.innerText =
+      "Scan meerdere leerlingen achter elkaar. Daarna verwerk je ze samen.";
+
+  }
+
+  else {
+
+    snel.className =
+      "modeInactive";
+
+    direct.className =
+      "modeActive";
+
+    wachtrijCard.style.display =
       "none";
 
-  }, 4000);
+    info.innerText =
+      "Scan één leerling om rechtstreeks aan of af te melden.";
+
+  }
 }
 
 
@@ -716,17 +1444,22 @@ function toonFout(melding) {
 function toonOverzicht() {
 
   document
-    .getElementById("scannerCard")
+    .getElementById(
+      "scannerCard"
+    )
     .style.display =
     "none";
 
+
   document
-    .getElementById("overzichtCard")
+    .getElementById(
+      "overzichtCard"
+    )
     .style.display =
     "block";
 
-  laadOverzicht();
 
+  laadOverzicht();
 }
 
 
@@ -738,37 +1471,45 @@ function laadOverzicht() {
       pin: studiePin
     },
 
-    function(resultaat) {
+    function(r) {
 
-      if (!resultaat.succes) {
+      if (!r.succes) {
 
         toonFout(
-          resultaat.melding
+          r.melding
         );
 
         return;
       }
 
+
       document
         .getElementById("aantal")
         .innerText =
-        resultaat.totaal;
+        r.totaal;
+
 
       const inhoud =
         document.getElementById(
           "overzichtInhoud"
         );
 
+
       let html = `
+
         <div class="overzichtTotaal">
-          ${resultaat.totaal}
+
+          ${r.totaal}
           leerlingen aanwezig
+
         </div>
+
       `;
+
 
       const klassen =
         Object.keys(
-          resultaat.klassen
+          r.klassen
         ).sort(
           (a, b) =>
             a.localeCompare(
@@ -778,24 +1519,28 @@ function laadOverzicht() {
             )
         );
 
-      if (
-        klassen.length === 0
-      ) {
+
+      if (klassen.length === 0) {
 
         html += `
-          <p style="text-align:center">
+
+          <p class="klein">
             Momenteel zijn er geen leerlingen aangemeld.
           </p>
+
         `;
       }
+
 
       klassen.forEach(
         function(klas) {
 
           const leerlingen =
-            resultaat.klassen[klas];
+            r.klassen[klas];
+
 
           html += `
+
             <div class="klasblok">
 
               <div class="klastitel">
@@ -810,62 +1555,145 @@ function laadOverzicht() {
 
               </div>
 
-              <div class="leerlingen">
           `;
+
 
           leerlingen.forEach(
             function(leerling) {
 
               html += `
+
                 <div class="leerling">
+
                   ${escapeHtml(
                     leerling.voornaam
                   )}
+
                   ${escapeHtml(
                     leerling.achternaam
                   )}
-                </div>
-              `;
 
+                </div>
+
+              `;
             }
           );
 
+
           html += `
-              </div>
             </div>
           `;
-
         }
       );
 
+
       inhoud.innerHTML =
         html;
-
     }
   );
 }
 
 
-// ======================================================
-// TERUG NAAR SCANNER
-// ======================================================
-
 function sluitOverzicht() {
 
   document
-    .getElementById("overzichtCard")
+    .getElementById(
+      "overzichtCard"
+    )
     .style.display =
     "none";
 
+
   document
-    .getElementById("scannerCard")
+    .getElementById(
+      "scannerCard"
+    )
     .style.display =
     "block";
 }
 
 
 // ======================================================
-// VEILIGE TEKST
+// FOUT
+// ======================================================
+
+function toonFout(melding) {
+
+  const box =
+    document.getElementById(
+      "resultaat"
+    );
+
+
+  box.style.display =
+    "block";
+
+  box.className =
+    "fout";
+
+
+  document
+    .getElementById("icoon")
+    .innerText =
+    "⚠";
+
+
+  document
+    .getElementById("naam")
+    .innerText =
+    "Niet verwerkt";
+
+
+  document
+    .getElementById("klas")
+    .innerText =
+    "";
+
+
+  document
+    .getElementById("status")
+    .innerText =
+    melding;
+
+
+  document
+    .getElementById("tijd")
+    .innerText =
+    "";
+
+
+  tril([120, 80, 120]);
+
+
+  setTimeout(
+    function() {
+
+      box.style.display =
+        "none";
+
+    },
+    4000
+  );
+}
+
+
+// ======================================================
+// TRILLING
+// ======================================================
+
+function tril(patroon) {
+
+  if (navigator.vibrate) {
+
+    navigator.vibrate(
+      patroon
+    );
+  }
+}
+
+
+// ======================================================
+// HTML VEILIG MAKEN
 // ======================================================
 
 function escapeHtml(tekst) {
@@ -878,7 +1706,15 @@ function escapeHtml(tekst) {
     .replaceAll("'", "&#039;");
 }
 
+
+// ======================================================
+// INIT
+// ======================================================
+
+tekenWachtrij();
+
 </script>
 
 </body>
+
 </html>
