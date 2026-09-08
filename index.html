@@ -1,1 +1,426 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>GIBO Kaart - Studie</title>
 
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #7660a7;
+      color: white;
+      text-align: center;
+      padding: 18px 12px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 5px 0 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 14px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 9px rgba(0,0,0,.08);
+    }
+
+    .counter {
+      text-align: center;
+    }
+
+    #aantal {
+      font-size: 52px;
+      font-weight: bold;
+      color: #7660a7;
+    }
+
+    #reader {
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .start {
+      background: #55b88d;
+      color: white;
+    }
+
+    .resultaat {
+      display: none;
+      text-align: center;
+      padding: 22px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
+
+    .aan {
+      background: #e2f5ec;
+      border: 3px solid #55b88d;
+    }
+
+    .af {
+      background: #fde5ef;
+      border: 3px solid #e61d79;
+    }
+
+    .fout {
+      background: #fff5cb;
+      border: 3px solid #fad517;
+    }
+
+    #icoon {
+      font-size: 46px;
+    }
+
+    #naam {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    #klas {
+      font-size: 18px;
+      margin-top: 4px;
+    }
+
+    #status {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 12px;
+    }
+
+    .pinbox input {
+      width: 100%;
+      padding: 14px;
+      font-size: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #scannerCard {
+      display: none;
+    }
+
+    .klein {
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>GIBO Kaart</h1>
+  <p>Studie – scansysteem</p>
+</header>
+
+<div class="container">
+
+  <div class="card counter">
+    <div id="aantal">–</div>
+    <div>leerlingen momenteel aangemeld</div>
+  </div>
+
+  <div id="resultaat" class="resultaat">
+    <div id="icoon"></div>
+    <div id="naam"></div>
+    <div id="klas"></div>
+    <div id="status"></div>
+    <div id="tijd"></div>
+  </div>
+
+  <div id="pinCard" class="card pinbox">
+    <h3 style="text-align:center">Studie openen</h3>
+
+    <input
+      id="pin"
+      type="password"
+      inputmode="numeric"
+      placeholder="Studie-PIN"
+    >
+
+    <button class="start" onclick="startSysteem()">
+      Scanner starten
+    </button>
+  </div>
+
+  <div id="scannerCard" class="card">
+    <div id="reader"></div>
+
+    <p class="klein">
+      Richt de camera op de QR-code van de leerling.
+    </p>
+  </div>
+
+</div>
+
+<script>
+
+const API_URL =
+  "PLAK_HIER_STRAX_DE_APPS_SCRIPT_URL";
+
+let studiePin = "";
+let scanner;
+let bezig = false;
+let laatsteCode = "";
+let laatsteTijd = 0;
+
+
+// ----------------------
+// API via JSONP
+// ----------------------
+
+function apiCall(params, callback) {
+
+  const callbackNaam =
+    "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+
+  window[callbackNaam] = function(data) {
+    callback(data);
+    delete window[callbackNaam];
+    script.remove();
+  };
+
+  params.callback = callbackNaam;
+
+  const query = new URLSearchParams(params).toString();
+
+  const script = document.createElement("script");
+  script.src = API_URL + "?" + query;
+
+  script.onerror = function() {
+    toonFout("Kan geen verbinding maken met het studiesysteem.");
+    bezig = false;
+  };
+
+  document.body.appendChild(script);
+}
+
+
+// ----------------------
+// START
+// ----------------------
+
+function startSysteem() {
+
+  studiePin =
+    document.getElementById("pin").value.trim();
+
+  if (!studiePin) {
+    toonFout("Vul eerst de studie-PIN in.");
+    return;
+  }
+
+  apiCall(
+    {
+      actie: "status",
+      pin: studiePin
+    },
+    function(resultaat) {
+
+      if (!resultaat.succes) {
+        toonFout(resultaat.melding);
+        return;
+      }
+
+      document.getElementById("aantal").innerText =
+        resultaat.aantal;
+
+      document.getElementById("pinCard").style.display =
+        "none";
+
+      document.getElementById("scannerCard").style.display =
+        "block";
+
+      startCamera();
+    }
+  );
+}
+
+
+// ----------------------
+// CAMERA
+// ----------------------
+
+function startCamera() {
+
+  scanner = new Html5Qrcode("reader");
+
+  const config = {
+    fps: 10,
+    qrbox: {
+      width: 240,
+      height: 240
+    }
+  };
+
+  scanner.start(
+    { facingMode: "environment" },
+    config,
+    qrGevonden
+  ).catch(function(err) {
+    toonFout(
+      "De camera kon niet worden gestart. Controleer de cameratoestemming van je browser."
+    );
+  });
+}
+
+
+// ----------------------
+// QR GEVONDEN
+// ----------------------
+
+function qrGevonden(code) {
+
+  const nu = Date.now();
+
+  if (bezig) return;
+
+  if (
+    code === laatsteCode &&
+    nu - laatsteTijd < 5000
+  ) {
+    return;
+  }
+
+  bezig = true;
+  laatsteCode = code;
+  laatsteTijd = nu;
+
+  apiCall(
+    {
+      actie: "scan",
+      pin: studiePin,
+      code: code
+    },
+    function(resultaat) {
+
+      bezig = false;
+
+      if (!resultaat.succes) {
+        toonFout(resultaat.melding);
+        return;
+      }
+
+      document.getElementById("aantal").innerText =
+        resultaat.aantal;
+
+      toonLeerling(resultaat);
+    }
+  );
+}
+
+
+// ----------------------
+// RESULTAAT
+// ----------------------
+
+function toonLeerling(r) {
+
+  const box =
+    document.getElementById("resultaat");
+
+  box.style.display = "block";
+
+  document.getElementById("naam").innerText =
+    r.voornaam + " " + r.achternaam;
+
+  document.getElementById("klas").innerText =
+    "Klas " + r.klas;
+
+  document.getElementById("tijd").innerText =
+    r.tijd;
+
+  if (r.status === "AANGEMELD") {
+
+    box.className = "resultaat aan";
+
+    document.getElementById("icoon").innerText =
+      "✓";
+
+    document.getElementById("status").innerText =
+      "AANGEMELD";
+
+  } else {
+
+    box.className = "resultaat af";
+
+    document.getElementById("icoon").innerText =
+      "↩";
+
+    document.getElementById("status").innerText =
+      "AFGEMELD";
+  }
+
+  setTimeout(function() {
+    box.style.display = "none";
+  }, 3500);
+}
+
+
+function toonFout(melding) {
+
+  const box =
+    document.getElementById("resultaat");
+
+  box.style.display = "block";
+  box.className = "resultaat fout";
+
+  document.getElementById("icoon").innerText =
+    "⚠";
+
+  document.getElementById("naam").innerText =
+    "Niet verwerkt";
+
+  document.getElementById("klas").innerText =
+    "";
+
+  document.getElementById("status").innerText =
+    melding;
+
+  document.getElementById("tijd").innerText =
+    "";
+
+  setTimeout(function() {
+    box.style.display = "none";
+  }, 5000);
+}
+
+</script>
+
+</body>
+</html>
